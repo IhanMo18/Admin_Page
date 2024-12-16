@@ -1,5 +1,4 @@
 package com.boostrap.landingpage.entity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -22,9 +21,9 @@ public class UserEntity {
 
 
 
-    @OneToMany(mappedBy = "userEntity",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     @JsonManagedReference
-    private List<OrderEntity> orderEntityList;
+    private List<OrderEntity> orderEntities;
 
 
     public UserEntity(String username, String password, String email,String role,String country) {
@@ -64,14 +63,6 @@ public class UserEntity {
         return id_user;
     }
 
-    public List<OrderEntity> getOrderEntityList() {
-        return orderEntityList;
-    }
-
-    public void setOrderEntityList(List<OrderEntity> orderEnntityList) {
-        this.orderEntityList = orderEnntityList;
-    }
-
     public void setId_user(Integer id_user) {
         this.id_user = id_user;
     }
@@ -90,6 +81,14 @@ public class UserEntity {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public List<OrderEntity> getOrderEntities() {
+        return orderEntities;
+    }
+
+    public void setOrderEntities(List<OrderEntity> orderDetailEntities) {
+        this.orderEntities = orderDetailEntities;
     }
 
 }

@@ -1,8 +1,6 @@
 package com.boostrap.landingpage.services;
 
 import com.boostrap.landingpage.dto.ProductDTO;
-import com.boostrap.landingpage.entity.OrderDetailEntity;
-import com.boostrap.landingpage.entity.ProductEntity;
 import com.boostrap.landingpage.mappers.ProductMapper;
 import com.boostrap.landingpage.repository.IProductRepository;
 import org.springframework.stereotype.Service;
