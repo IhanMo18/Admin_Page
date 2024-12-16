@@ -60,13 +60,6 @@ public class ProductServiceImpl implements IService<ProductDTO> {
         productRepository.deleteAll();
     }
 
-//    public ProductDTO update (ProductDTO productDTO, Integer id){
-//       ProductEntity productEntity = productRepository.findById(id).get();
-//       if (!(productEntity.getName().toLowerCase().equals(productDTO.name()))) productEntity.setName(productDTO.name());
-//       else if (productEntity.getPrice() != productDTO.price()){
-//           productEntity.setPrice(productDTO.price());
-//       }
-//       return productDTO;
 
 
 }

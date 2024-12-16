@@ -22,14 +22,14 @@ public class OrderEntity {
     private Double total;
 
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JsonBackReference
     @JoinColumn(name = "id_user")
     private UserEntity user;
 
 
     @OneToMany(mappedBy = "orderEntity",
-    cascade = CascadeType.ALL)
+    cascade = CascadeType.REMOVE)
    @JsonManagedReference
    private List <PurchasedProductEntity> purchasedProductEntityList;
 

@@ -21,27 +21,27 @@ public class OrderServiceImpl implements IService<OrderDTO> {
 
     IOrderRepository iOrderRepository;
     OrderMapper orderMapper;
-    IUserRepository iUserRepository ;
+    IPurchaseProductRepository iPurchaseProductRepository;
 
-    public OrderServiceImpl(IOrderRepository iOrderRepository, OrderMapper orderMapper,IUserRepository iUserRepository) {
+    public OrderServiceImpl(IOrderRepository iOrderRepository, OrderMapper orderMapper,IPurchaseProductRepository iPurchaseProductRepository) {
         this.iOrderRepository = iOrderRepository;
         this.orderMapper = orderMapper;
-        this.iUserRepository=iUserRepository;
+        this.iPurchaseProductRepository= iPurchaseProductRepository;
     }
 
     @Override
     public OrderDTO save(OrderDTO element) {
-        total(element.id_user());
         iOrderRepository.save( orderMapper.toEntity(element));
         return element;
     }
 
     @Override
     public List<OrderDTO> getAll() {
-    return iOrderRepository.findAll()
-            .stream()
-            .map(orderMapper::toDto)
-            .collect(Collectors.toList());
+        return iOrderRepository.findAll()
+                .stream()
+                .map(orderMapper::toDto)
+                .collect(Collectors.toList()
+                );
     }
 
     @Override
@@ -59,22 +59,5 @@ public class OrderServiceImpl implements IService<OrderDTO> {
         iOrderRepository.deleteAll();
     }
 
-    public void total(Integer id){
-        var userEntity = iUserRepository.findById(id);
-        if (userEntity.get().getOrderEntities() == null){
-            for (OrderEntity order : userEntity.get().getOrderEntities()){
-                Double total = 0.0;
-
-                for (PurchasedProductEntity product : order.getPurchasedProductEntityList()){
-                    total += product.getSubTotal();
-                }
-
-                order.setTotal(total);
-            }
-        }
-
-    }
-
-//    public List<PurchasedProductEntity> /
 
 }

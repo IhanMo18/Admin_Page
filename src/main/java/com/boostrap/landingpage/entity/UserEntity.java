@@ -21,7 +21,7 @@ public class UserEntity {
 
 
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<OrderEntity> orderEntities;
 

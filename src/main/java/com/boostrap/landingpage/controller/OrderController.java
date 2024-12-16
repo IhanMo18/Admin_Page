@@ -26,4 +26,14 @@ public class OrderController {
     public ResponseEntity<?> getAll(){
         return new ResponseEntity<>(orderServiceImpl.getAll(),HttpStatus.OK);
     }
+
+    @DeleteMapping("order/delete/all")
+    public void deleteALL(){
+        orderServiceImpl.deleteAll();
+    }
+
+    @DeleteMapping("order/delete/{id}")
+    public void deleteALL(@PathVariable Integer id){
+        orderServiceImpl.deleteById(id);
+    }
 }

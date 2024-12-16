@@ -19,7 +19,7 @@ public class PurchasedProductEntity {
     private Integer productQuantity;
     private Double subTotal;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "id_order")
     @JsonBackReference
     OrderEntity orderEntity;
