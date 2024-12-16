@@ -1,6 +1,5 @@
 package com.boostrap.landingpage.services;
 
-import com.boostrap.landingpage.dto.ProductDTO;
 import com.boostrap.landingpage.dto.UserDTO;
 import com.boostrap.landingpage.entity.OrderEntity;
 import com.boostrap.landingpage.entity.UserEntity;
@@ -40,10 +39,10 @@ public class UserServiceImpl implements IService<UserDTO> {
 
             //Esto es poruque se inicia un order en null por defecto
 
-            if (user.getOrderEntityList() == null ){
+            if (user.getOrderEntities() == null ){
 
                 OrderEntity orderEntity = new OrderEntity(user,localDate);
-                user.getOrderEntityList().add(orderEntity);
+                user.getOrderEntities().add(orderEntity);
             }
         }
 
@@ -63,5 +62,9 @@ public class UserServiceImpl implements IService<UserDTO> {
     @Override
     public void deleteAll() {
         userRepository.deleteAll();
+    }
+
+    public List<OrderEntity> getAllEntitiesByuserId(Integer id){
+        return userRepository.findById(id).get().getOrderEntities();
     }
 }

@@ -1,77 +1,89 @@
 package com.boostrap.landingpage.entity;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
-@Table(name = "Order_Table")
+@Table(name = "Order_entity")
 public class OrderEntity {
 
-
-    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id_order;
+    @Id
+    private Integer order_id;
 
 
     @Column(columnDefinition = "DATE")
     private LocalDate orderDate;
 
+    private Double total;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JsonBackReference
-    private UserEntity userEntity;
+    @JoinColumn(name = "id_user")
+    private UserEntity user;
+
+
+    @OneToMany(mappedBy = "orderEntity",
+    cascade = CascadeType.REMOVE)
+   @JsonManagedReference
+   private List <PurchasedProductEntity> purchasedProductEntityList;
 
 
 
 
-    @OneToOne(mappedBy = "order",cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private OrderDetailEntity orderDetail;
+    public OrderEntity(UserEntity user, LocalDate orderDate) {
+        this.user=user;
+        this.orderDate=orderDate;
 
-
-    public OrderEntity(UserEntity userEntity, LocalDate orderDate) {
-       this.userEntity = userEntity;
-        this.orderDate = orderDate;
     }
 
     public OrderEntity() {
 
     }
 
+    public Integer getOrder_id() {
+        return order_id;
+    }
 
+    public void setOrder_id(Integer orderItem_id) {
+        this.order_id = orderItem_id;
+    }
+
+
+    public List<PurchasedProductEntity> getPurchasedProductEntityList() {
+        return purchasedProductEntityList;
+    }
+
+    public void setPurchasedProductEntityList(List<PurchasedProductEntity> purchasedProductEntityList) {
+        this.purchasedProductEntityList = purchasedProductEntityList;
+    }
     public LocalDate getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(LocalDate order_date) {
-        this.orderDate = order_date;
+    public void setOrderDate(LocalDate orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
     }
 
 
-
-    public UserEntity getUserEntity() {
-        return userEntity;
-    }
-
-    public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
-    }
-
-    public OrderDetailEntity getOrderDetail() {
-        return orderDetail;
-    }
-
-    public void setOrderDetail(OrderDetailEntity orderItem) {
-        this.orderDetail = orderItem;
-    }
-    public Integer getId_order() {
-        return id_order;
-    }
-
-    public void setId_order(Integer id_order) {
-        this.id_order = id_order;
-    }
 }

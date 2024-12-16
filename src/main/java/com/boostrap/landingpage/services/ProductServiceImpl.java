@@ -1,8 +1,6 @@
 package com.boostrap.landingpage.services;
 
 import com.boostrap.landingpage.dto.ProductDTO;
-import com.boostrap.landingpage.entity.OrderDetailEntity;
-import com.boostrap.landingpage.entity.ProductEntity;
 import com.boostrap.landingpage.mappers.ProductMapper;
 import com.boostrap.landingpage.repository.IProductRepository;
 import org.springframework.stereotype.Service;
@@ -62,13 +60,6 @@ public class ProductServiceImpl implements IService<ProductDTO> {
         productRepository.deleteAll();
     }
 
-//    public ProductDTO update (ProductDTO productDTO, Integer id){
-//       ProductEntity productEntity = productRepository.findById(id).get();
-//       if (!(productEntity.getName().toLowerCase().equals(productDTO.name()))) productEntity.setName(productDTO.name());
-//       else if (productEntity.getPrice() != productDTO.price()){
-//           productEntity.setPrice(productDTO.price());
-//       }
-//       return productDTO;
 
 
 }

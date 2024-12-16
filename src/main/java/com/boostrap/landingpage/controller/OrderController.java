@@ -10,24 +10,30 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/")
 public class OrderController {
 
-    OrderServiceImpl orderService;
-
-    public OrderController(OrderServiceImpl orderService) {
-        this.orderService = orderService;
+    public OrderController(OrderServiceImpl orderServiceImpl) {
+        this.orderServiceImpl = orderServiceImpl;
     }
+
+    OrderServiceImpl orderServiceImpl;
 
     @PostMapping("order/save")
     public ResponseEntity<?> save(@RequestBody OrderDTO orderDTO){
-        System.out.println("eeL ID ES " + orderDTO.user_id());
-        return new ResponseEntity<>(orderService.save(orderDTO),HttpStatus.CREATED);
+
+        return new  ResponseEntity<>(orderServiceImpl.save(orderDTO),HttpStatus.OK);
     }
 
-    @GetMapping("orders")
+    @GetMapping("order/details")
     public ResponseEntity<?> getAll(){
-        return new ResponseEntity<>(orderService.getAll(), HttpStatus.FOUND);
+        return new ResponseEntity<>(orderServiceImpl.getAll(),HttpStatus.OK);
     }
 
+    @DeleteMapping("order/delete/all")
+    public void deleteALL(){
+        orderServiceImpl.deleteAll();
+    }
 
-
-
+    @DeleteMapping("order/delete/{id}")
+    public void deleteALL(@PathVariable Integer id){
+        orderServiceImpl.deleteById(id);
+    }
 }

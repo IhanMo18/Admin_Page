@@ -1,48 +1,52 @@
 package com.boostrap.landingpage.services;
 
+
 import com.boostrap.landingpage.dto.OrderDTO;
-import com.boostrap.landingpage.dto.UserDTO;
+import com.boostrap.landingpage.dto.PurchaseProductDTO;
 import com.boostrap.landingpage.entity.OrderEntity;
-import com.boostrap.landingpage.entity.UserEntity;
+import com.boostrap.landingpage.entity.PurchasedProductEntity;
 import com.boostrap.landingpage.mappers.OrderMapper;
 import com.boostrap.landingpage.repository.IOrderRepository;
+import com.boostrap.landingpage.repository.IPurchaseProductRepository;
+import com.boostrap.landingpage.repository.IUserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class OrderServiceImpl implements IService<OrderDTO>{
+public class OrderServiceImpl implements IService<OrderDTO> {
 
-    public OrderServiceImpl(IOrderRepository iOrderRepository, OrderMapper orderMapper) {
-        this.iOrderRepository = iOrderRepository;
-        this.orderMapper = orderMapper;
-    }
+
 
     IOrderRepository iOrderRepository;
     OrderMapper orderMapper;
+    IPurchaseProductRepository iPurchaseProductRepository;
 
+    public OrderServiceImpl(IOrderRepository iOrderRepository, OrderMapper orderMapper,IPurchaseProductRepository iPurchaseProductRepository) {
+        this.iOrderRepository = iOrderRepository;
+        this.orderMapper = orderMapper;
+        this.iPurchaseProductRepository= iPurchaseProductRepository;
+    }
 
     @Override
     public OrderDTO save(OrderDTO element) {
-        System.out.println("El id een el service es " + element.user_id());
-       var order =  orderMapper.toEntity(element);
-      iOrderRepository.save(order);
+        iOrderRepository.save( orderMapper.toEntity(element));
         return element;
     }
 
     @Override
     public List<OrderDTO> getAll() {
-      List<OrderDTO> list = new ArrayList<>();
-      for (OrderEntity order : iOrderRepository.findAll()){
-          list.add(orderMapper.toDto(order));
-      }
-      return list;
+        return iOrderRepository.findAll()
+                .stream()
+                .map(orderMapper::toDto)
+                .collect(Collectors.toList()
+                );
     }
 
     @Override
     public OrderDTO getById(Integer id) {
-       return orderMapper.toDto(iOrderRepository.findById(id).get());
+      return orderMapper.toDto(iOrderRepository.findById(id).get());
     }
 
     @Override
@@ -54,5 +58,6 @@ public class OrderServiceImpl implements IService<OrderDTO>{
     public void deleteAll() {
         iOrderRepository.deleteAll();
     }
+
 
 }

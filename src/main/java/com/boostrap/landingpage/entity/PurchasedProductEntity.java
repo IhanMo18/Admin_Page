@@ -17,24 +17,23 @@ public class PurchasedProductEntity {
 
 
     private Integer productQuantity;
-    private Double total;
+    private Double subTotal;
 
-    @ManyToOne
-    @JoinColumn(name = "id_order_detail")
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "id_order")
     @JsonBackReference
-    OrderDetailEntity orderDetailEntity;
+    OrderEntity orderEntity;
 
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "id_product")
     @JsonManagedReference
     ProductEntity productEntity;
 
 
-    public PurchasedProductEntity( Integer productQuantity,OrderDetailEntity orderDetailEntity) {
+    public PurchasedProductEntity(Integer productQuantity, OrderEntity orderEntity) {
         this.productQuantity = productQuantity;
-        this.orderDetailEntity = orderDetailEntity;
-        this.productEntity = productEntity;
+        this.orderEntity = orderEntity;
     }
 
     public PurchasedProductEntity() {
@@ -57,20 +56,20 @@ public class PurchasedProductEntity {
         this.productQuantity = productQuantity;
     }
 
-    public Double getTotal() {
-        return this.total;
+    public Double getSubTotal() {
+        return this.subTotal;
     }
 
-    public void setTotal() {
-        this.total = productQuantity * productEntity.getPrice();
+    public void setSubTotal(Double subTotal) {
+        this.subTotal = productQuantity * productEntity.getPrice();
     }
 
-    public OrderDetailEntity getOrderDetailEntity() {
-        return orderDetailEntity;
+    public OrderEntity getOrderEntity() {
+        return orderEntity;
     }
 
-    public void setOrderDetailEntity(OrderDetailEntity orderDetailEntity) {
-        this.orderDetailEntity = orderDetailEntity;
+    public void setOrderEntity(OrderEntity orderEntity) {
+        this.orderEntity = orderEntity;
     }
 
     public ProductEntity getProductEntity() {
