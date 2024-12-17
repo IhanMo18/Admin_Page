@@ -12,7 +12,7 @@ public class OrderMapper implements IMapper<OrderEntity, OrderDTO>{
 
     @Override
     public OrderDTO toDto(OrderEntity element) {
-   return new OrderDTO(element.getUser().getId_user(),element.getOrder_id());
+   return new OrderDTO(element.getUser().getId_user(),element.getOrder_id(),element.getTotal());
     }
 
     @Override

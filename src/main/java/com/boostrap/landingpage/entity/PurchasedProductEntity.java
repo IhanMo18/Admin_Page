@@ -9,8 +9,6 @@ import jakarta.persistence.*;
 public class PurchasedProductEntity {
 
 
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id_purchaseProduct;
@@ -19,13 +17,13 @@ public class PurchasedProductEntity {
     private Integer productQuantity;
     private Double subTotal;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne()
     @JoinColumn(name = "id_order")
     @JsonBackReference
     OrderEntity orderEntity;
 
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne()
     @JoinColumn(name = "id_product")
     @JsonManagedReference
     ProductEntity productEntity;

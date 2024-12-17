@@ -1,6 +1,7 @@
 package com.boostrap.landingpage.services;
 
 import com.boostrap.landingpage.dto.PurchaseProductDTO;
+import com.boostrap.landingpage.entity.OrderEntity;
 import com.boostrap.landingpage.entity.PurchasedProductEntity;
 import com.boostrap.landingpage.mappers.PurchasedProductMapper;
 import com.boostrap.landingpage.repository.IOrderRepository;
@@ -33,10 +34,14 @@ public class PurchaseProductServiceImpl implements IService<PurchaseProductDTO>{
     @Override
     public PurchaseProductDTO save(PurchaseProductDTO element) {
         var purchedProduct = purchasedProductMapper.toEntity(element);
-        total(element.id_Order());
         purchedProduct.setProductEntity (productRepository.findById(element.id_Product()).get());
         subTotal(element.id_Product(),purchedProduct);
         purchaseProductRepository.save(purchedProduct);
+
+        for (PurchasedProductEntity purchasedProduct : purchaseProductRepository.findAll()){
+            total(purchasedProduct.getOrderEntity().getOrder_id());
+        }
+
         return element;
     }
 

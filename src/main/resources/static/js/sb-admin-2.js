@@ -1,3 +1,109 @@
+let cardTotal = document.querySelector("#earn_total");
+let cardOrders=document.querySelector("#orders");
+showTotalCard()
+
+
+
+
+
+
+
+
+
+
+
+async function showTotalCard() {
+  try {
+    // Realiza la solicitud
+    const response = await fetch('http://localhost:8080/api/v1/order/details', {
+      method: "GET",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error en la solicitud: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log('Datos recibidos:', data);
+
+
+    let total = 0;
+    for (const obj of data) {
+      total += obj.total;
+    }
+
+
+    const cardTotal = document.querySelector("#earn_total");
+    if (cardTotal) {
+      let span = document.createElement("span")
+      cardTotal.appendChild(span)
+      span.innerHTML=`${total} $`;
+      span.style.color = "green"
+
+
+    } else {
+      console.error('Elemento con ID "cardTotal" no encontrado.');
+    }
+
+  } catch (error) {
+    console.error('Error al obtener los datos:', error);
+  }
+}
+
+function showOrdersCard()=>{
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 (function($) {
   "use strict"; // Start of use strict
 

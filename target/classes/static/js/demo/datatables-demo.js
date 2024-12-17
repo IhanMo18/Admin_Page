@@ -33,13 +33,9 @@ async function loadDataTable() {
                 <td>${user.country}</td>
                 <td class="d-flex">
                 
-                <a href="#" class="btn-success btn-circle btn-sm">
-                  <i class="fa fa-upload "></i>
-                  </a>
-                
                
-               <a href="#" class="btn btn-warning btn-circle btn-sm">
-                <i class="fa fa-exclamation-triangle"></i>
+               <a href="#" class="btn btn-success btn-circle btn-sm">
+                <i class="fa fa-shopping-cart"></i>
                 </a>
                 
                 <a href="#"  class="btn btn-danger btn-circle btn-sm" ${user.username}>
@@ -49,16 +45,21 @@ async function loadDataTable() {
             
                 </td>
                 
-                
             </tr>`;
         }
-
         const data = document.querySelector(".table_user");
         data.innerHTML = table;
 
     } catch (error) {
         console.error("Error al cargar los datos:", error);
     }
+
+
+
+
+
+
+
 }
 
 

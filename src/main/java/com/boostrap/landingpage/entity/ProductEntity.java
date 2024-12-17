@@ -18,7 +18,7 @@ public class ProductEntity {
 
 
 
-    @OneToOne(mappedBy = "productEntity",cascade = CascadeType.PERSIST)
+    @OneToOne(mappedBy = "productEntity",cascade = CascadeType.REMOVE,orphanRemoval = true)
     @JsonBackReference
    PurchasedProductEntity purchasedProductEntity;
 
