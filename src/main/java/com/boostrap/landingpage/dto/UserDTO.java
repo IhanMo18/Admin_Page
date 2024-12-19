@@ -11,8 +11,7 @@ public record UserDTO(
          String email,
          String role,
          String country,
-         Integer id_user,
-         List<OrderEntity> orders
+         Integer id_user
 
 
 ) {

@@ -28,7 +28,7 @@ public class OrderEntity {
     private UserEntity user;
 
 
-    @OneToMany(mappedBy = "orderEntity", cascade = {CascadeType.PERSIST,CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "orderEntity", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<PurchasedProductEntity> purchasedProductEntityList;
 

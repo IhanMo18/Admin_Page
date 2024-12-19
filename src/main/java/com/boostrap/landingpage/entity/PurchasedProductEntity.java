@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "Product_Purchased")
 public class PurchasedProductEntity {
@@ -23,18 +25,20 @@ public class PurchasedProductEntity {
     OrderEntity orderEntity;
 
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "id_product")
     @JsonManagedReference
     ProductEntity productEntity;
 
 
-    public PurchasedProductEntity(Integer productQuantity, OrderEntity orderEntity) {
+    public PurchasedProductEntity(Integer productQuantity, OrderEntity orderEntity,ProductEntity productEntity) {
         this.productQuantity = productQuantity;
+        this.productEntity=productEntity;
         this.orderEntity = orderEntity;
     }
 
     public PurchasedProductEntity() {
+
     }
 
 
@@ -58,9 +62,6 @@ public class PurchasedProductEntity {
         return this.subTotal;
     }
 
-    public void setSubTotal(Double subTotal) {
-        this.subTotal = productQuantity * productEntity.getPrice();
-    }
 
     public OrderEntity getOrderEntity() {
         return orderEntity;
@@ -70,6 +71,10 @@ public class PurchasedProductEntity {
         this.orderEntity = orderEntity;
     }
 
+    public void setSubTotal(Double subTotal) {
+        this.subTotal = subTotal;
+    }
+
     public ProductEntity getProductEntity() {
         return productEntity;
     }
@@ -77,6 +82,4 @@ public class PurchasedProductEntity {
     public void setProductEntity(ProductEntity productEntity) {
         this.productEntity = productEntity;
     }
-
-
 }

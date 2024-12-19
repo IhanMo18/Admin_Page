@@ -20,7 +20,6 @@ public class PurchaseProductController implements IRestController<PurchaseProduc
     @Override
     @PostMapping("purchase/product/save")
     public ResponseEntity<?> save(@RequestBody PurchaseProductDTO element) {
-        System.out.println(element.id_Product());
      return new ResponseEntity<>(purchaseProductService.save(element),HttpStatus.OK);
     }
 

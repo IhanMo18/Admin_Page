@@ -16,10 +16,11 @@ import java.util.List;
 public class PurchaseProductServiceImpl implements IService<PurchaseProductDTO>{
 
 
-    IProductRepository productRepository;
+
     IPurchaseProductRepository purchaseProductRepository;
     PurchasedProductMapper purchasedProductMapper;
     IOrderRepository iOrderRepository;
+    IProductRepository productRepository;
 
 
     public PurchaseProductServiceImpl(IPurchaseProductRepository purchaseProductRepository, PurchasedProductMapper purchasedProductMapper,IProductRepository productRepository,IOrderRepository iOrderRepository) {
@@ -34,9 +35,8 @@ public class PurchaseProductServiceImpl implements IService<PurchaseProductDTO>{
     @Override
     public PurchaseProductDTO save(PurchaseProductDTO element) {
         var purchedProduct = purchasedProductMapper.toEntity(element);
-        purchedProduct.setProductEntity (productRepository.findById(element.id_Product()).get());
         setRealStock(purchedProduct);
-        subTotal(element.id_Product(),purchedProduct);
+        subTotal(element.id_product(),purchedProduct);
         purchaseProductRepository.save(purchedProduct);
 
         for (PurchasedProductEntity purchasedProduct : purchaseProductRepository.findAll()){

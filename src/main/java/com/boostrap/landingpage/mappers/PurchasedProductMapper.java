@@ -2,6 +2,7 @@ package com.boostrap.landingpage.mappers;
 
 import com.boostrap.landingpage.dto.PurchaseProductDTO;
 import com.boostrap.landingpage.entity.OrderEntity;
+import com.boostrap.landingpage.entity.ProductEntity;
 import com.boostrap.landingpage.entity.PurchasedProductEntity;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +19,10 @@ public class PurchasedProductMapper implements IMapper<PurchasedProductEntity, P
     public PurchasedProductEntity toEntity(PurchaseProductDTO element) {
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setOrder_id(element.id_Order());
+        ProductEntity product = new ProductEntity();
+        product.setId_product(element.id_product());
 
-        return new PurchasedProductEntity(element.cantidad(), orderEntity);
+        return new PurchasedProductEntity(element.productQuantity(),orderEntity,product);
     }
 
 }
