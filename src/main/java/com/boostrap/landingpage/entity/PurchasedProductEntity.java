@@ -23,7 +23,7 @@ public class PurchasedProductEntity {
     OrderEntity orderEntity;
 
 
-    @OneToOne()
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_product")
     @JsonManagedReference
     ProductEntity productEntity;

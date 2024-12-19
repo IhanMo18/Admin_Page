@@ -35,6 +35,7 @@ public class PurchaseProductServiceImpl implements IService<PurchaseProductDTO>{
     public PurchaseProductDTO save(PurchaseProductDTO element) {
         var purchedProduct = purchasedProductMapper.toEntity(element);
         purchedProduct.setProductEntity (productRepository.findById(element.id_Product()).get());
+        setRealStock(purchedProduct);
         subTotal(element.id_Product(),purchedProduct);
         purchaseProductRepository.save(purchedProduct);
 
@@ -69,7 +70,7 @@ public class PurchaseProductServiceImpl implements IService<PurchaseProductDTO>{
         purchaseProductRepository.deleteAll();
     }
 
-    public void subTotal(Integer id,PurchasedProductEntity purchasedProduct){
+    private void subTotal(Integer id,PurchasedProductEntity purchasedProduct){
         var product=productRepository.findById(id);
         Double subTotal = product.get().getPrice()*purchasedProduct.getProductQuantity();
         purchasedProduct.setSubTotal(subTotal);
@@ -86,5 +87,14 @@ public class PurchaseProductServiceImpl implements IService<PurchaseProductDTO>{
         }
 
     }
+
+    private void setRealStock(PurchasedProductEntity purchasedProductEntity){
+        var product = productRepository.findById(purchasedProductEntity.getProductEntity().getId_product());
+      Integer realStock = product.get().getStock() - purchasedProductEntity.getProductQuantity();
+      product.get().setStock(realStock);
+      productRepository.save(product.get());
+    }
+
+
 }
 
