@@ -12,7 +12,7 @@ public class PurchasedProductMapper implements IMapper<PurchasedProductEntity, P
 
     @Override
     public PurchaseProductDTO toDto(PurchasedProductEntity element) {
-        return new PurchaseProductDTO(element.getProductQuantity(),element.getOrderEntity().getOrder_id(),element.getProductEntity().getId_product());
+        return new PurchaseProductDTO(element.getProductQuantity(),element.getOrderEntity().getOrder_id(),element.getProductEntity().getId_product(),element.getSubTotal());
     }
 
     @Override

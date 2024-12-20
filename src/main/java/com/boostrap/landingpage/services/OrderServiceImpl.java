@@ -11,6 +11,7 @@ import com.boostrap.landingpage.repository.IPurchaseProductRepository;
 import com.boostrap.landingpage.repository.IUserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,11 +38,17 @@ public class OrderServiceImpl implements IService<OrderDTO> {
 
     @Override
     public List<OrderDTO> getAll() {
-        return iOrderRepository.findAll()
-                .stream()
-                .map(orderMapper::toDto)
-                .collect(Collectors.toList()
-                );
+//        return iOrderRepository.findAll()
+//                .stream()
+//                .map(orderMapper::toDto)
+//                .collect(Collectors.toList()
+//                );
+        List<OrderDTO> orderDtos = new ArrayList<>();
+        for (OrderEntity order : iOrderRepository.findAll()){
+            total(order.getOrder_id());
+            orderDtos.add(orderMapper.toDto(order));
+        }
+        return orderDtos;
     }
 
     @Override
@@ -57,6 +64,19 @@ public class OrderServiceImpl implements IService<OrderDTO> {
     @Override
     public void deleteAll() {
         iOrderRepository.deleteAll();
+    }
+
+    private void total(Integer id){
+        var orderEntity = iOrderRepository.findById(id);
+        Double total = 0.0;
+
+        if (orderEntity.get().getPurchasedProductEntityList() != null){
+            for (PurchasedProductEntity product : orderEntity.get().getPurchasedProductEntityList()){
+                total += product.getSubTotal();
+            }
+            orderEntity.get().setTotal(total);
+        }
+
     }
 
 

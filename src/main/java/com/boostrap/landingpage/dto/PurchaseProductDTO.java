@@ -4,6 +4,7 @@ public record PurchaseProductDTO(
 
         Integer productQuantity,
         Integer id_Order,
-        Integer id_product
+        Integer id_product,
+        Double subTotal
 
 ) {}

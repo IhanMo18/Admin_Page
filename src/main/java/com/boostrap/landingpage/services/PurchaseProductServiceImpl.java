@@ -1,7 +1,7 @@
 package com.boostrap.landingpage.services;
 
 import com.boostrap.landingpage.dto.PurchaseProductDTO;
-import com.boostrap.landingpage.entity.OrderEntity;
+import com.boostrap.landingpage.entity.ProductEntity;
 import com.boostrap.landingpage.entity.PurchasedProductEntity;
 import com.boostrap.landingpage.mappers.PurchasedProductMapper;
 import com.boostrap.landingpage.repository.IOrderRepository;
@@ -15,84 +15,63 @@ import java.util.List;
 @Service
 public class PurchaseProductServiceImpl implements IService<PurchaseProductDTO>{
 
-
-
-    IPurchaseProductRepository purchaseProductRepository;
+    IPurchaseProductRepository iPurchaseProductRepository;
     PurchasedProductMapper purchasedProductMapper;
-    IOrderRepository iOrderRepository;
-    IProductRepository productRepository;
+    IProductRepository iProductRepository;
 
 
-    public PurchaseProductServiceImpl(IPurchaseProductRepository purchaseProductRepository, PurchasedProductMapper purchasedProductMapper,IProductRepository productRepository,IOrderRepository iOrderRepository) {
-        this.purchaseProductRepository = purchaseProductRepository;
+    public PurchaseProductServiceImpl(IPurchaseProductRepository iPurchaseProductRepository,
+                                      PurchasedProductMapper purchasedProductMapper,IProductRepository iProductRepository) {
+
+        this.iPurchaseProductRepository = iPurchaseProductRepository;
         this.purchasedProductMapper = purchasedProductMapper;
-        this.productRepository=productRepository;
-        this.iOrderRepository = iOrderRepository;
+        this.iProductRepository = iProductRepository;
     }
-
-
 
     @Override
     public PurchaseProductDTO save(PurchaseProductDTO element) {
-        var purchedProduct = purchasedProductMapper.toEntity(element);
-        setRealStock(purchedProduct);
-        subTotal(element.id_product(),purchedProduct);
-        purchaseProductRepository.save(purchedProduct);
-
-        for (PurchasedProductEntity purchasedProduct : purchaseProductRepository.findAll()){
-            total(purchasedProduct.getOrderEntity().getOrder_id());
-        }
-
+        var purchasedProduct = purchasedProductMapper.toEntity(element);
+        subTotal(iProductRepository.findById(element.id_product()).get(),purchasedProduct);
+        setRealStock(purchasedProduct,iProductRepository.findById(element.id_product()).get());
         return element;
     }
 
     @Override
     public List<PurchaseProductDTO> getAll() {
         List<PurchaseProductDTO> purchaseProductDTOS=new ArrayList<>();
-      for (PurchasedProductEntity product : purchaseProductRepository.findAll()){
-         purchaseProductDTOS.add(purchasedProductMapper.toDto(product));
-      }
+
+        for (PurchasedProductEntity purchasedProduct : iPurchaseProductRepository.findAll()){
+          purchaseProductDTOS.add(purchasedProductMapper.toDto(purchasedProduct));
+        }
+
       return purchaseProductDTOS;
     }
 
     @Override
     public PurchaseProductDTO getById(Integer id) {
-     return  purchasedProductMapper.toDto(purchaseProductRepository.findById(id).get());
+     return  purchasedProductMapper.toDto(iPurchaseProductRepository.findById(id).get());
     }
 
     @Override
     public void deleteById(Integer id) {
-        purchaseProductRepository.deleteById(id);
+        iPurchaseProductRepository.deleteById(id);
     }
 
     @Override
     public void deleteAll() {
-        purchaseProductRepository.deleteAll();
+        iPurchaseProductRepository.deleteAll();
     }
 
-    private void subTotal(Integer id,PurchasedProductEntity purchasedProduct){
-        var product=productRepository.findById(id);
-        Double subTotal = product.get().getPrice()*purchasedProduct.getProductQuantity();
+    private void subTotal(ProductEntity product,PurchasedProductEntity purchasedProduct){
+        Double subTotal = product.getPrice() * purchasedProduct.getProductQuantity();
         purchasedProduct.setSubTotal(subTotal);
+        iPurchaseProductRepository.save(purchasedProduct);
     }
 
-    private void total(Integer id){
-        var orderEntity = iOrderRepository.findById(id);
-        Double total = 0.0;
-        if (orderEntity.get().getPurchasedProductEntityList() != null){
-            for (PurchasedProductEntity product : orderEntity.get().getPurchasedProductEntityList()){
-                total += product.getSubTotal();
-            }
-            orderEntity.get().setTotal(total);
-        }
-
-    }
-
-    private void setRealStock(PurchasedProductEntity purchasedProductEntity){
-        var product = productRepository.findById(purchasedProductEntity.getProductEntity().getId_product());
-      Integer realStock = product.get().getStock() - purchasedProductEntity.getProductQuantity();
-      product.get().setStock(realStock);
-      productRepository.save(product.get());
+    private void setRealStock(PurchasedProductEntity purchasedProductEntity,ProductEntity product){
+      Integer realStock = product.getStock() - purchasedProductEntity.getProductQuantity();
+      product.setStock(realStock);
+      iPurchaseProductRepository.save(purchasedProductEntity);
     }
 
 
