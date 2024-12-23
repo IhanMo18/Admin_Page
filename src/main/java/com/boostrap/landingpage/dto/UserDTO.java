@@ -1,9 +1,5 @@
 package com.boostrap.landingpage.dto;
 
-import com.boostrap.landingpage.entity.OrderEntity;
-
-import java.util.List;
-
 public record UserDTO(
 
          String username,

@@ -1,20 +1,12 @@
 let cardTotal = document.querySelector("#earn_total");
-let cardOrders=document.querySelector("#orders");
-showTotalCard()
+let cardOrders = document.querySelector("#orders");
+const cardStock = document.querySelector("#total_Stock");
 
-
-
-
-
-
-
-
-
-
+showTotalCard();
+showProductsInStock();
 
 async function showTotalCard() {
   try {
-    // Realiza la solicitud
     const response = await fetch('http://localhost:8080/api/v1/order/details', {
       method: "GET",
       headers: {
@@ -28,25 +20,28 @@ async function showTotalCard() {
     }
 
     const data = await response.json();
-    console.log('Datos recibidos:', data);
 
+    let total = data.reduce((accum, obj) => accum + obj.total, 0);
+    let orderCount = data.filter(obj => obj != null).length;
 
-    let total = 0;
-    for (const obj of data) {
-      total += obj.total;
-    }
-
-
-    const cardTotal = document.querySelector("#earn_total");
+    // Actualizar tarjeta total
     if (cardTotal) {
       let span = document.createElement("span")
       cardTotal.appendChild(span)
       span.innerHTML=`${total} $`;
-      span.style.color = "green"
-
-
+      span.className= "text-success";
     } else {
-      console.error('Elemento con ID "cardTotal" no encontrado.');
+      console.error('Elemento con ID "#earn_total" no encontrado.');
+    }
+
+    // Actualizar tarjeta órdenes
+    if (cardOrders) {
+      let spanOrderCount = document.createElement("span")
+      cardOrders.appendChild(spanOrderCount)
+      spanOrderCount.innerHTML=`${orderCount}`;
+      spanOrderCount.className="text-primary";
+    } else {
+      console.error('Elemento con ID "#orders" no encontrado.');
     }
 
   } catch (error) {
@@ -54,55 +49,45 @@ async function showTotalCard() {
   }
 }
 
-function showOrdersCard()=>{
+async function getProductData(){
+  try {
+    const response = await fetch('http://localhost:8080/api/v1/products', {
+      method: "GET",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      }
+    });
 
+    return await response.json()
+  }catch (error) {
+    console.log(error)
+  }
 }
 
+async function showProductsInStock() {
+  try {
+    let productStockData = await getProductData();
+    var productStock = 0;
+
+    for (let i = 0; i < productStockData.length; i++) {
+
+      if (productStockData[i].stock !== undefined) {
+        productStock += productStockData[i].stock;
+      }
+    }
+
+    let spanOrderCount = document.createElement("span");
+    cardStock.appendChild(spanOrderCount);
+    spanOrderCount.innerHTML = `${productStock}`;
+    spanOrderCount.className = "text-info";
+
+  } catch (error) {
+    console.error("Error al procesar los datos: ", error);
+  }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
 (function($) {
   "use strict"; // Start of use strict
@@ -121,7 +106,7 @@ function showOrdersCard()=>{
     if ($(window).width() < 768) {
       $('.sidebar .collapse').collapse('hide');
     };
-    
+
     // Toggle the side navigation when window is resized below 480px
     if ($(window).width() < 480 && !$(".sidebar").hasClass("toggled")) {
       $("body").addClass("sidebar-toggled");
@@ -134,7 +119,7 @@ function showOrdersCard()=>{
   $('body.fixed-nav .sidebar').on('mousewheel DOMMouseScroll wheel', function(e) {
     if ($(window).width() > 768) {
       var e0 = e.originalEvent,
-        delta = e0.wheelDelta || -e0.detail;
+          delta = e0.wheelDelta || -e0.detail;
       this.scrollTop += (delta < 0 ? 1 : -1) * 30;
       e.preventDefault();
     }

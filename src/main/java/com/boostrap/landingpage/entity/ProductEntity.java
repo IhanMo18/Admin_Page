@@ -17,7 +17,7 @@ public class ProductEntity {
     private String name;
     private Double price;
     private Integer stock;
-
+    private Boolean inExist=true;
 
 
 
@@ -72,6 +72,14 @@ public class ProductEntity {
 
     public void setPurchasedProductEntity(List<PurchasedProductEntity> purchasedProductEntity) {
         this.purchasedProductEntity = purchasedProductEntity;
+    }
+
+    public Boolean getInExist() {
+        return inExist;
+    }
+
+    public void setInExist(Boolean inExist) {
+        this.inExist = inExist;
     }
 
 }

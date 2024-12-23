@@ -12,7 +12,7 @@ public class ProductMapper implements  IMapper<ProductEntity, ProductDTO>{
 
     @Override
     public ProductDTO toDto(ProductEntity element) {
-      return new ProductDTO(element.getName(),element.getPrice(),element.getStock(),element.getId_product());
+      return new ProductDTO(element.getName(),element.getPrice(),element.getStock(),element.getId_product(),element.getInExist());
     }
 
     @Override
