@@ -42,12 +42,8 @@ public class ProductServiceImpl implements IService<ProductDTO> {
 
     @Override
     public ProductDTO getById(Integer id){
-       try {
            return productMapper.toDto(productRepository.findById(id).get());
-       }catch (NoSuchElementException exception){
-           exception.printStackTrace();
-       }
-        return null;
+
     }
 
 

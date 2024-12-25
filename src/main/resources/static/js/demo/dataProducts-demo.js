@@ -1,8 +1,6 @@
 // Call the dataTables jQuery plugin
 $(document).ready(async function() {
         await loadDataTableProducts();
-        let deleteLabel = document.querySelector(".delete")
-        deleteLabel.g
         $('#dataProducts').DataTable();
 
 });
@@ -21,56 +19,64 @@ async function loadDataTableProducts() {
                 <td>${product.name}</td>
                 <td>${product.price}$</td>
                 <td>${product.stock}</td>
-                <td class="d-flex center">
+                <td>
                     <i class="fa fa-circle text-success">
                     </i>
                 </td>
                 
                 <td>
                    <div class="input-group" style="max-width: 150px;">
-                      <button class="btn btn-outline-secondary btn-sm" type="button">-</button>
+                      <button class="btn btn-outline-success btn-sm" type="button">-</button>
                       <input type="text" class="form-control text-center" value="0" style="max-width: 60px;">
-                      <button class="btn btn-outline-secondary btn-sm" type="button">+</button
+                      <button class="btn btn-outline-success btn-sm" type="button">+</button
                    </div>
                 </td>
             
                  <td>
-                    <a href="#" class="btn btn-danger btn-circle btn-sm">
+                    <a  class="btn btn-danger btn-circle btn-sm delete"  onclick="deleteProduct(event)" id=${product.id_product}>
                         <i class="fas fa-trash"></i>
                     </a>
+                    
+                     <a  class="btn btn-success btn-circle btn-sm refresh"  id=${product.id_product}>
+                        <i class="fas fa-arrow-up"></i>
+                    </a>
+                    
                   </td>
+                  
+                  
                 
               
-              </tr>`;
+              </tr>`
 
-            } else {
+            }if (!product.inExist) {
                 table += `<tr>
-                <td>${product.id_product}</td>
-                <td>${product.name}</td>
-                <td>${product.price}$</td>
-                <td>${product.stock}</td>
-                <td class="d-flex">
-                    <i class="fa fa-circle text-danger">
+                <td class="bg-gray-100">${product.id_product}</td>
+                <td class="bg-gray-100">${product.name}</td>
+                <td class="bg-gray-100">${product.price}$</td>
+                <td class="bg-gray-100">${product.stock}</td>
+                <td class="bg-gray-100">
+                    <i class="fa fa-circle text-danger bg-gray-100">
                     </i>
-                </td>;
+                </td>
                 
 
-                <td>
-                   <div class="input-group" style="max-width: 150px;">
-                      <button class="btn btn-outline-secondary btn-sm" type="button">-</button>
-                      <input type="text" class="form-control text-center" value="0" style="max-width: 60px;">
-                      <button class="btn btn-outline-secondary btn-sm" type="button">+</button
+                <td class="justify-content-center align-items-center bg-gray-100">
+                   <div class="input-group flex-nowrap" style="max-width:150px;">
+                      <button class="btn btn-outline-success btn-sm" type="button">-</button>
+                      <input type="text" class="form-control text-center" value="0" style="max-width:60px">
+                      <button class="btn btn-outline-success btn-sm" type="button">+</button
                    </div>
                 </td>
             
-                 <td>
-                    <a class="btn btn-danger btn-circle btn-sm delete" value={product.id_product}>
-                        <i class="fas fa-trash"></i>
+                 <td class="bg-gray-100">
+                     <a  class="btn btn-success btn-circle btn-sm refresh"  id=${product.id_product}>
+                        <i class="fas fa-arrow-up"></i>
                     </a>
+                    
                   </td>
                 
               
-              </tr>`;
+              </tr>`
             }
         }
 
@@ -89,7 +95,59 @@ let getData = async () => {
 };
 
 
-async function deleteProduct(id){
-    const response =fetch(`api/v1/product/delete/${id}`)
-    return await response.json()
+async function deleteProduct(event){
+    event.preventDefault();
+    const btnDelete = event.target.closest(".delete");
+    const productId = btnDelete.getAttribute("id");
+    const response=await fetch(`http://localhost:8080/api/v1/product/delete/${productId}`,{
+        method: 'DELETE',
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8'
+        }})
+
+
+    if (response.ok)location.reload();
+
+    if (responsePurchase.ok){
+
+
+
+    }
+
+}
+
+async function saveProduct() {
+    const name = document.querySelector(".name").value;
+    const price = document.querySelector(".price").value;
+    const stock = document.querySelector(".stock").value;
+    const label = document.querySelector(".infoProduct")
+    console.log(name, price, stock);
+    console.log("ENTRE");
+
+
+    let product = { name: name, price: price, stock: stock };
+    console.log(product)
+
+    if (!product){
+        console.log("entre en no es null")
+    }else{
+
+        const response = await fetch("http://localhost:8080/api/v1/product/save", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(product),
+        });
+
+        if (!response.ok) {
+            console.error(`HTTP error! status: ${response.status}`);
+        } else {
+            const data = await response.json();
+            console.log(data);
+        }
+
+        location.reload()
+    }
+
 }

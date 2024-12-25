@@ -20,21 +20,32 @@ async function loadDataTableUsers() {
         let table = "";
 
         for (const user of users) {
+
             table += `<tr>
-                <td>${user.id_user}</td>
+                <td class="text-secondary">${user.id_user}</td>
                 <td>${user.username}</td>
                 <td>${user.email}</td>
-                <td>${user.role}</td>
-                <td>${user.country}</td>
-                <td class="d-flex">
-                    <a href="#" class="btn btn-success btn-circle btn-sm">
-                        <i class="fa fa-shopping-cart"></i>
-                    </a>
+                <td class="text-uppercase role">${user.role}</td>
+                <td  class="text-uppercase">${user.country}</td>
+                <td>
+                
                     <a href="#" class="btn btn-danger btn-circle btn-sm">
                         <i class="fas fa-trash"></i>
                     </a>
+                    
+                    <a href="#" class=" btn btn-secondary btn-circle btn-sm">
+                        <i class="fa fa-list"></i>
+                    </a>
+                    
                 </td>
             </tr>`;
+
+            if (user.role.toString() === "ADMIN"){
+                console.log("es")
+                let role = document.querySelector(".role")
+                role.className="text-info"
+            }
+
         }
 
         const data = document.querySelector(".table_user");

@@ -40,7 +40,7 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
@@ -70,7 +70,7 @@
             <!-- Nav Item - Tables -->
             <li class="nav-item">
                 <a class="nav-link" href="tableUser.html">
-                    <i class="fas fa-fw fa-table"></i>
+                    <i class="fas fa-fw fa-user-tag"></i>
                     <span>Users</span></a>
             </li>
 
@@ -78,8 +78,14 @@
 
             <li class="nav-item">
                 <a class="nav-link" href="tableProducts.html">
-                    <i class="fas fa-fw fa-table"></i>
+                    <i class="fas fa-fw fa-warehouse"></i>
                     <span>Products</span></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="tableOrders.html">
+                    <i class="fas fa-ticket-alt"></i>
+                    <span>Orders</span></a>
             </li>
 
             <hr class="sidebar-divider">
@@ -299,19 +305,66 @@
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+                <div class="container-fluid mb-5">
+                   <div class="infoProduct">
+                   </div>
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Aqui voy a poner para crear productos</h1>
+                    <div class="card shadow mt-2">
+                        <div class="card-header py-3 d-flex flex-row" >
+                            <h6 class="m-0 font-weight-bold text-success mr-1" >Add Product</h6>
+                            <i class="fa fa-check"></i>
+                        </div>
+
+                        <div class="card-body flex-row">
+
+                            <div class="col-8 col-lg-4 col-md-5 mb-2 mt-1" >
+                                <label for="productName" class="form-label ">Product Name:</label>
+                                <input type="text" class="form-control border-left-dark name" id="productName"
+                                        required>
+                            </div>
+
+
+
+                            <div class="col-6 col-lg-2 col-md-3 mb-3 mt-1">
+                                <label for="productPrice" class="form-label">Price:</label>
+                                <input type="number" class="form-control border-left-dark  price"
+                                        id="productPrice"
+                                        step="1"
+                                        required
+                                >
+                            </div>
+
+                            <div class="col-6 col-lg-2 col-md-3 mb-3  mt-1 ">
+                                <label for="productStock" class="form-label">Stock:</label>
+                                <input type="number" class="form-control border-left-dark stock"
+                                        id="productStock"
+                                        step="1"
+                                        required
+                                >
+                            </div>
+
+                            <div class="text-truncate w-100 d-flex justify-content-center align-items-end">
+                                <button type="button" class="w-auto btn btn-outline-success" onclick="saveProduct()">Add</button>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+
+
 
                     <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
+                    <div class="card shadow mb-4 mt-5">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Products</h6>
+                            <h6 class="m-0 font-weight-bold text-dark">Products</h6>
                         </div>
+
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataProducts" width="100%" cellspacing="0">
+                                <table class="table  table-hover navbar-nav-scroll">
                                     <thead>
                                         <tr>
 
@@ -321,7 +374,7 @@
                                             <th>Stock</th>
                                             <th>InStock</th>
                                             <th>Update</th>
-                                            <th>Action</th>
+                                            <th>Delete</th>
 
                                         </tr>
                                     </thead>
@@ -333,7 +386,7 @@
                                             <th>Stock</th>
                                             <th>InStock</th>
                                             <th>Update</th>
-                                            <th>Action</th>
+                                            <th>Delete</th>
                                             
                                         </tr>
                                     </tfoot>
