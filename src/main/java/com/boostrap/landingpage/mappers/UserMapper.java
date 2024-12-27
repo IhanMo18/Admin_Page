@@ -1,6 +1,7 @@
 package com.boostrap.landingpage.mappers;
 
 import com.boostrap.landingpage.dto.UserDTO;
+import com.boostrap.landingpage.entity.OrderEntity;
 import com.boostrap.landingpage.entity.UserEntity;
 import com.boostrap.landingpage.repository.IUserRepository;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class UserMapper implements IMapper<UserEntity, UserDTO>{
     @Override
     public UserDTO toDto(UserEntity element) {
-       return new UserDTO(element.getUsername(),element.getPassword(),element.getEmail(),element.getRole(),element.getCountry(),element.getId_user(),element.getOrderEntities());
+       return new UserDTO(element.getUsername(),element.getPassword(),element.getEmail(),element.getRole(),element.getCountry(),element.getId_user());
     }
 
     @Override

@@ -35,18 +35,8 @@ public class UserServiceImpl implements IService<UserDTO> {
         for (UserEntity user : userRepository.findAll()){
             LocalDate localDate = LocalDate.now();
             listUserDto.add(userMapper.toDto(user));
-
-
-            //Esto es poruque se inicia un order en null por defecto
-
-            if (user.getOrderEntities() == null ){
-
-                OrderEntity orderEntity = new OrderEntity(user,localDate);
-                user.getOrderEntities().add(orderEntity);
-            }
         }
-
-        return listUserDto;
+        return  listUserDto;
     }
 
     @Override

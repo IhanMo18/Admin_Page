@@ -1,9 +1,9 @@
 package com.boostrap.landingpage.services;
 
 import com.boostrap.landingpage.dto.PurchaseProductDTO;
+import com.boostrap.landingpage.entity.ProductEntity;
 import com.boostrap.landingpage.entity.PurchasedProductEntity;
 import com.boostrap.landingpage.mappers.PurchasedProductMapper;
-import com.boostrap.landingpage.repository.IOrderRepository;
 import com.boostrap.landingpage.repository.IProductRepository;
 import com.boostrap.landingpage.repository.IPurchaseProductRepository;
 import org.springframework.stereotype.Service;
@@ -14,72 +14,86 @@ import java.util.List;
 @Service
 public class PurchaseProductServiceImpl implements IService<PurchaseProductDTO>{
 
-
-    IProductRepository productRepository;
-    IPurchaseProductRepository purchaseProductRepository;
+    IPurchaseProductRepository iPurchaseProductRepository;
     PurchasedProductMapper purchasedProductMapper;
-    IOrderRepository iOrderRepository;
+    IProductRepository iProductRepository;
 
 
-    public PurchaseProductServiceImpl(IPurchaseProductRepository purchaseProductRepository, PurchasedProductMapper purchasedProductMapper,IProductRepository productRepository,IOrderRepository iOrderRepository) {
-        this.purchaseProductRepository = purchaseProductRepository;
+    public PurchaseProductServiceImpl(IPurchaseProductRepository iPurchaseProductRepository,
+                                      PurchasedProductMapper purchasedProductMapper,IProductRepository iProductRepository) {
+
+        this.iPurchaseProductRepository = iPurchaseProductRepository;
         this.purchasedProductMapper = purchasedProductMapper;
-        this.productRepository=productRepository;
-        this.iOrderRepository = iOrderRepository;
+        this.iProductRepository = iProductRepository;
     }
-
-
 
     @Override
     public PurchaseProductDTO save(PurchaseProductDTO element) {
-        var purchedProduct = purchasedProductMapper.toEntity(element);
-        total(element.id_Order());
-        purchedProduct.setProductEntity (productRepository.findById(element.id_Product()).get());
-        subTotal(element.id_Product(),purchedProduct);
-        purchaseProductRepository.save(purchedProduct);
-        return element;
+        var purchasedProduct = purchasedProductMapper.toEntity(element);
+        var product = iProductRepository.findById(element.id_product()).get();
+
+        if (product.getInExist()){
+            subTotal(product,purchasedProduct);
+            setRealStock(purchasedProduct,product);
+            return element;
+        }
+       return null;
     }
 
     @Override
     public List<PurchaseProductDTO> getAll() {
         List<PurchaseProductDTO> purchaseProductDTOS=new ArrayList<>();
-      for (PurchasedProductEntity product : purchaseProductRepository.findAll()){
-         purchaseProductDTOS.add(purchasedProductMapper.toDto(product));
-      }
+        for (PurchasedProductEntity purchasedProduct : iPurchaseProductRepository.findAll()){
+          purchaseProductDTOS.add(purchasedProductMapper.toDto(purchasedProduct));
+        }
       return purchaseProductDTOS;
     }
 
     @Override
     public PurchaseProductDTO getById(Integer id) {
-     return  purchasedProductMapper.toDto(purchaseProductRepository.findById(id).get());
+     return  purchasedProductMapper.toDto(iPurchaseProductRepository.findById(id).get());
     }
 
     @Override
     public void deleteById(Integer id) {
-        purchaseProductRepository.deleteById(id);
+        iPurchaseProductRepository.deleteById(id);
     }
 
     @Override
     public void deleteAll() {
-        purchaseProductRepository.deleteAll();
+        iPurchaseProductRepository.deleteAll();
     }
 
-    public void subTotal(Integer id,PurchasedProductEntity purchasedProduct){
-        var product=productRepository.findById(id);
-        Double subTotal = product.get().getPrice()*purchasedProduct.getProductQuantity();
+    private void subTotal(ProductEntity product,PurchasedProductEntity purchasedProduct){
+        //Controlo que el precio sea lo que tenga
+
+        if (product.getStock() < purchasedProduct.getProductQuantity()){
+            Double subTotal =  product.getPrice() * product.getStock();
+            purchasedProduct.setSubTotal(subTotal);
+            iPurchaseProductRepository.save(purchasedProduct);
+        }
+        Double subTotal = product.getPrice() * purchasedProduct.getProductQuantity();
         purchasedProduct.setSubTotal(subTotal);
+        iPurchaseProductRepository.save(purchasedProduct);
     }
 
-    private void total(Integer id){
-        var orderEntity = iOrderRepository.findById(id);
-        Double total = 0.0;
-        if (orderEntity.get().getPurchasedProductEntityList() != null){
-            for (PurchasedProductEntity product : orderEntity.get().getPurchasedProductEntityList()){
-                total += product.getSubTotal();
-            }
-            orderEntity.get().setTotal(total);
+    private void setRealStock(PurchasedProductEntity purchasedProduct,ProductEntity product){
+
+        //Aseguro que el maximo sea el stock que existe
+
+        if (product.getStock() < purchasedProduct.getProductQuantity()){
+            purchasedProduct.setProductQuantity(product.getStock());
+            product.setStock(0);
+            product.setInExist(false);
+            iPurchaseProductRepository.save(purchasedProduct);
+        }else{
+            Integer realStock = product.getStock() - purchasedProduct.getProductQuantity();
+            product.setStock(realStock);
+            iPurchaseProductRepository.save(purchasedProduct);
         }
 
     }
+
+
 }
 

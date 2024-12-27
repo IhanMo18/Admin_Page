@@ -1,7 +1,9 @@
 package com.boostrap.landingpage.entity;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+
+import java.util.List;
+
 
 @Entity
 @Table(name = "Product")
@@ -15,12 +17,13 @@ public class ProductEntity {
     private String name;
     private Double price;
     private Integer stock;
+    private Boolean inExist=true;
 
 
 
-    @OneToOne(mappedBy = "productEntity",cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "productEntity")
     @JsonBackReference
-   PurchasedProductEntity purchasedProductEntity;
+   List <PurchasedProductEntity> purchasedProductEntity;
 
     public ProductEntity(String name, Double price,Integer stock) {
         this.name = name;
@@ -55,14 +58,6 @@ public class ProductEntity {
     }
 
 
-    public PurchasedProductEntity getPurchasedProductEntity() {
-        return purchasedProductEntity;
-    }
-
-    public void setPurchasedProductEntity(PurchasedProductEntity purchasedProductEntity) {
-        this.purchasedProductEntity = purchasedProductEntity;
-    }
-
     public Integer getStock() {
         return stock;
     }
@@ -71,7 +66,21 @@ public class ProductEntity {
         this.stock = stack;
     }
 
+    public List<PurchasedProductEntity> getPurchasedProductEntity() {
+        return purchasedProductEntity;
+    }
 
+    public void setPurchasedProductEntity(List<PurchasedProductEntity> purchasedProductEntity) {
+        this.purchasedProductEntity = purchasedProductEntity;
+    }
+
+    public Boolean getInExist() {
+        return inExist;
+    }
+
+    public void setInExist(Boolean inExist) {
+        this.inExist = inExist;
+    }
 
 }
 

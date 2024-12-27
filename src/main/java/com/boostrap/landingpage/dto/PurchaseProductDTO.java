@@ -2,9 +2,9 @@ package com.boostrap.landingpage.dto;
 
 public record PurchaseProductDTO(
 
-        Integer cantidad,
+        Integer productQuantity,
         Integer id_Order,
-        Integer id_Product
-
+        Integer id_product,
+        Double subTotal
 
 ) {}

@@ -4,7 +4,8 @@ public record ProductDTO(
         String name,
         Double price,
         Integer stock,
-        Integer id_product
+        Integer id_product,
+        Boolean inExist
 )
 {
 
