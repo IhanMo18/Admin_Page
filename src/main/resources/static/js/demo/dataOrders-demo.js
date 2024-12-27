@@ -54,9 +54,17 @@ async function showModalWindow(id) {
     const bodyModal = document.querySelector(".modal-body")
     let details = ''
     const purchasedProducts = await getPurchasedProducts()
+    console.log('no ')
     for (const obj of purchasedProducts){
+        console.log('entre')
+        console.log(obj)
+
         if (obj.id_Order === id){
            let product = await geProducts(obj.id_product)
+            console.log(`El producto es ${product}`)
+
+
+
             details +=  `<div class="card_order">
                 <div class="card border-left-dark shadow h-100 py-2 mt-2">
                     <div class="card-body">
